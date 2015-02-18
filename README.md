@@ -13,3 +13,4 @@ You now have access to the motors and the IMU.
 NOTES:
 - To compile: go to /home/rhoban/Project/ros_ws and type catkin_make (eventually catkin_make install)
 - To run a node: rosrun PACKAGE_NAME NODE_NAME (ie: rosrun rosban test_motor)
+- The custom ROS packages should be created in /home/rhoban/Project/ros_ws/src/
