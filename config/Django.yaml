@@ -1,0 +1,262 @@
+rleg_a_p_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: r_ankle_pitch
+    joint_speed: 6.0
+    motor:
+        id: 32
+        init: 512
+        min: 0
+        max: 1023
+
+rleg_a_r_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: r_ankle_roll
+    joint_speed: 6.0
+    motor:
+        id: 17
+        init: 512
+        min: 0
+        max: 1023
+
+lleg_a_p_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: l_ankle_pitch
+    joint_speed: 6.0
+    motor:
+        id: 37
+        init: 512
+        min: 0
+        max: 1023
+
+lleg_a_r_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: l_ankle_roll
+    joint_speed: 6.0
+    motor:
+        id: 38
+        init: 512
+        min: 0
+        max: 1023
+
+rarm_s_r_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: r_shoulder_roll
+    joint_speed: 6.0
+    motor:
+        id: 131
+        init: 512
+        min: 0
+        max: 1023
+
+rarm_s_p_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: r_shoulder_pitch
+    joint_speed: 6.0
+    motor:
+        id: 130
+        init: 512
+        min: 0
+        max: 1023
+
+rarm_e_p_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: r_elbow_pitch
+    joint_speed: 6.0
+    motor:
+        id: 132
+        init: 512
+        min: 0
+        max: 1023
+
+larm_s_r_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: l_shoulder_roll
+    joint_speed: 6.0
+    motor:
+        id: 121
+        init: 512
+        min: 0
+        max: 1023
+
+larm_s_p_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: l_shoulder_pitch
+    joint_speed: 6.0
+    motor:
+        id: 120
+        init: 512
+        min: 0
+        max: 1023
+
+larm_e_p_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: l_elbow_pitch
+    joint_speed: 6.0
+    motor:
+        id: 122
+        init: 512
+        min: 0
+        max: 1023
+
+rleg_h_r_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: r_hip_roll
+    joint_speed: 6.0
+    motor:
+        id: 35
+        init: 512
+        min: 0
+        max: 1023
+
+rleg_h_p_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: r_hip_pitch
+    joint_speed: 6.0
+    motor:
+        id: 36
+        init: 512
+        min: 0
+        max: 1023
+
+rleg_h_y_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: r_hip_yaw
+    joint_speed: 6.0
+    motor:
+        id: 103
+        init: 512
+        min: 0
+        max: 1023
+
+lleg_h_r_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: l_hip_roll
+    joint_speed: 6.0
+    motor:
+        id: 10
+        init: 512
+        min: 0
+        max: 1023
+
+lleg_h_p_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: l_hip_pitch
+    joint_speed: 6.0
+    motor:
+        id: 12
+        init: 512
+        min: 0
+        max: 1023
+
+lleg_h_y_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: l_hip_yaw
+    joint_speed: 6.0
+    motor:
+        id: 102
+        init: 512
+        min: 0
+        max: 1023
+
+rleg_k_p_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: r_knee_pitch
+    joint_speed: 6.0
+    motor:
+        id: 6
+        init: 512
+        min: 0
+        max: 1023
+
+lleg_k_p_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: l_knee_pitch
+    joint_speed: 6.0
+    motor:
+        id: 15
+        init: 512
+        min: 0
+        max: 1023
+
+head_y_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: head_yaw
+    joint_speed: 6.0
+    motor:
+        id: 140
+        init: 512
+        min: 0
+        max: 1023
+
+head_p_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: head_pitch
+    joint_speed: 6.0
+    motor:
+        id: 141
+        init: 512
+        min: 0
+        max: 1023
+
+dyn_controllers:
+    names: [lleg_a_r_controller, lleg_a_p_controller, rarm_e_p_controller, rarm_s_r_controller, rarm_s_p_controller, larm_e_p_controller, larm_s_r_controller, larm_s_p_controller, head_y_controller, head_p_controller, rleg_h_y_controller, rleg_h_r_controller, rleg_h_p_controller, rleg_k_p_controller, rleg_a_p_controller, rleg_a_r_controller, lleg_h_y_controller, lleg_h_r_controller, lleg_h_p_controller, lleg_k_p_controller]
