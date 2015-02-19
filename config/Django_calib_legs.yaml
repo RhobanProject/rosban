@@ -1,4 +1,4 @@
-leg_a_p_controller:
+rleg_a_p_controller:
     controller:
         package: dynamixel_controllers
         module: joint_position_controller
@@ -154,5 +154,6 @@ lleg_k_p_controller:
         min: 0
         max: 1023
 
+
 dyn_controllers:
-    names: [lleg_a_r_controller, lleg_a_p_controller, rleg_h_y_controller, rleg_h_r_controller, rleg_h_p_controller, rleg_k_p_controller, rleg_a_p_controller, rleg_a_r_controller, lleg_h_y_ controller, lleg_h_r_controller, lleg_h_p_controller, lleg_k_p_controller]
+    names: [lleg_a_r_controller, lleg_a_p_controller, rleg_h_y_controller, rleg_h_r_controller, rleg_h_p_controller, rleg_k_p_controller, rleg_a_p_controller, rleg_a_r_controller, lleg_h_y_controller, lleg_h_r_controller, lleg_h_p_controller, lleg_k_p_controller]
