@@ -10,6 +10,7 @@
                     baud_rate: 1000000
                     min_motor_id: 5
                     max_motor_id: 250
+		    motor_list_id: [32,17,37,38,35,36,103,10,12,102,6,15,241]
                     update_rate: 50
         </rosparam>
     </node>
