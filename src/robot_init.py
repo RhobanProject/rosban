@@ -129,7 +129,7 @@ class Robot():
         self.servos_pos[msg.motor_ids[0]] = msg.current_pos
 
     def zero(self):
-        rate = rospy.Rate(10)
+        rate = rospy.Rate(50)
         while not rospy.is_shutdown():
 
             for s in self.servos.keys():
