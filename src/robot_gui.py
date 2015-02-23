@@ -22,8 +22,10 @@ import roslib
 roslib.load_manifest('rosban')
 import rospy
 import wx
-
+import time
 from math import radians, degrees
+import sys
+import argparse
 
 # from geometry_msgs.msg import Twist
 # from sensor_msgs.msg import JointState
@@ -46,7 +48,7 @@ width = 325
 
 class servoSlider():
 
-    def __init__(self, parent, min_angle, max_angle, name, i):
+    def __init__(self, parent, min_angle, max_angle, name, i, default_enabled=False):
         self.name = name
         if name.find("_controller") > 0:  # remove _controller for display name
             name = name[0:-11]
@@ -55,7 +57,9 @@ class servoSlider():
 
         # self.position.SetTickFreq(5, 1)
         self.enabled = wx.CheckBox(parent, i, name + ":")
-        self.enabled.SetValue(False)
+
+        self.enabled.SetValue(default_enabled)
+
         self.position.Disable()
 
     def setPosition(self, angle):
@@ -68,12 +72,13 @@ class servoSlider():
 class controllerGUI(wx.Frame):
     TIMER_ID = 100
 
-    def __init__(self, parent, debug=False):
+    def __init__(self, parent, debug=False, default_enabled=False):
         wx.Frame.__init__(self, parent, -1, "Controller GUI",
                           style=wx.DEFAULT_FRAME_STYLE | (wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
         # sizer = wx.GridBagSizer(0,0)
         sizer = wx.BoxSizer(wx.VERTICAL)
-
+        self.default_enabled = default_enabled
+        self.ready = False
         # Move Servos
         # servo = wx.StaticBox(self, -1, 'Move Servos')
         # servo.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD))
@@ -87,20 +92,20 @@ class controllerGUI(wx.Frame):
         dynamixels_names = rospy.get_param('/dyn_controllers/', dict())
         dynamixels_params = rospy.get_param('/dynamixel/', dict())
 
-        params = dict()
+        self.params = dict()
 
         for c in dynamixels_params.keys():
             for i in dynamixels_params[c]['connected_ids']:
                 # print dynamixels_params[c][str(i)]
                 # print i
                 # print dynamixels_params[c].keys()
-                params[i] = dynamixels_params[c][str(i)]
+                self.params[i] = dynamixels_params[c][str(i)]
 
-        dynamixels = dict()
+        self.dynamixels = dict()
 
         for name in dynamixels_names['names']:
             # print name
-            dynamixels[name] = rospy.get_param(name, dict())
+            self.dynamixels[name] = rospy.get_param(name, dict())
 
         self.servos = dict()
         self.servos_pos = dict()
@@ -115,30 +120,30 @@ class controllerGUI(wx.Frame):
         self.labels_objs = dict()
         self.text_entry = dict()
 
+        self.id_name = dict()
         i = 0
-        for name in sorted(dynamixels.keys()):
+        for name in sorted(self.dynamixels.keys()):
             # print n,dynamixels[n]['motor']['max']#['joint_name']
 
         # for name in sorted(joints.keys()):
             # pull angles
             # min_angle, max_angle = getJointLimits(name, joint_defaults)
-            init_angle_raw = dynamixels[name]['motor']['init']
+            init_angle_raw = self.dynamixels[name]['motor']['init']
             # print params
-            min_angle = (dynamixels[name]['motor']['min'] - init_angle_raw) / params[
-                int(dynamixels[name]['motor']['id'])]['encoder_ticks_per_radian']
-            max_angle = (dynamixels[name]['motor']['max'] - init_angle_raw) / params[
-                int(dynamixels[name]['motor']['id'])]['encoder_ticks_per_radian']
+            min_angle = (self.dynamixels[name]['motor']['min'] - init_angle_raw) / self.params[
+                int(self.dynamixels[name]['motor']['id'])]['encoder_ticks_per_radian']
+            max_angle = (self.dynamixels[name]['motor']['max'] - init_angle_raw) / self.params[
+                int(self.dynamixels[name]['motor']['id'])]['encoder_ticks_per_radian']
 
             # in degrees?
             # min_angle = degrees(min_angle)
             # max_angle = degrees(max_angle)
-
             # min_angle = dynamixels[name]['motor']['min']/params[dynamixels[name]['motor']['id']]['encoder_ticks_per_radian']
             # max_angle =
             # dynamixels[name]['motor']['max']/params[dynamixels[name]['motor']['id']]['encoder_ticks_per_radian']
-            init_angle = dynamixels[name]['motor']['init'] / params[
-                dynamixels[name]['motor']['id']]['encoder_ticks_per_radian']
-
+            init_angle = self.dynamixels[name]['motor']['init'] / self.params[
+                self.dynamixels[name]['motor']['id']]['encoder_ticks_per_radian']
+            self.id_name[self.dynamixels[name]['motor']['id']] = name
             # init_angle = degrees(init_angle)
 
             # init_angle=0.0
@@ -147,27 +152,41 @@ class controllerGUI(wx.Frame):
             # min_angle,max_angle,init_angle,dynamixels[name]['motor']['min'],dynamixels[name]['motor']['max'],params[dynamixels[name]['motor']['id']]['encoder_ticks_per_radian']
 
             # create publisher
-            self.publishers[dynamixels[name]['motor']['id']] = rospy.Publisher(
+            self.publishers[self.dynamixels[name]['motor']['id']] = rospy.Publisher(
                 name + '/command', Float64)
+
+            # init?
+            # self.publishers[self.dynamixels[name][
+            #     'motor']['id']].publish(Float64(0.0))
+            # time.sleep(0.01)
             # if rospy.get_param('/arbotix/joints/'+name+'/type','dynamixel') == 'dynamixel':
             #     self.relaxers.append(rospy.ServiceProxy(name+'/relax', Relax))
             # else:
             #     self.relaxers.append(None)
 
-            # create subscriber
-            self.subscribers[dynamixels[name]['motor']['id']] = rospy.Subscriber(
+            # create subscriber (should not work in "fast" mode but thanks to
+            # ROS it still works)
+            self.subscribers[self.dynamixels[name]['motor']['id']] = rospy.Subscriber(
                 name + '/state', JointState, self.stateCb)
 
             # create service proxy
-            self.services[dynamixels[name]['motor']['id']] = rospy.ServiceProxy(
+            self.services[self.dynamixels[name]['motor']['id']] = rospy.ServiceProxy(
                 name + '/set_torque_limit', SetTorqueLimit)
 
-            self.services[dynamixels[name]['motor']['id']](INIT_TORQUE)
+            self.services[
+                self.dynamixels[name]['motor']['id']](INIT_TORQUE)
+
+            # if not self.default_enabled:
+            #     self.services[
+            #         self.dynamixels[name]['motor']['id']](INIT_TORQUE)
+            # else:
+            #     self.services[
+            #         self.dynamixels[name]['motor']['id']](ON_TORQUE)
 
             # create slider
             # s = servoSlider(self, min_angle, max_angle, name, i)
-            s = servoSlider(self, min_angle, max_angle, dynamixels[
-                            name]['joint_name'], dynamixels[name]['motor']['id'])
+            s = servoSlider(self, min_angle, max_angle, self.dynamixels[
+                            name]['joint_name'], self.dynamixels[name]['motor']['id'], default_enabled)
             s.setPosition(init_angle)
             # servoSizer.Add(s.enabled,(i,0), wx.GBSpan(1,1),wx.ALIGN_CENTER_VERTICAL)
             # servoSizer.Add(s.position,(i,1),
@@ -178,28 +197,41 @@ class controllerGUI(wx.Frame):
             servoSizer.Add(
                 s.position, (i, 1), wx.DefaultSpan, wx.ALIGN_CENTER_VERTICAL)
 
-            self.labels_objs[dynamixels[name]['motor']['id']] = wx.StaticText(
+            self.labels_objs[self.dynamixels[name]['motor']['id']] = wx.StaticText(
                 self, label=str(s.getPosition()))
 
-            self.text_entry[dynamixels[name]['motor']['id']] = wx.TextCtrl(
-                self, dynamixels[name]['motor']['id'], size=(-1, -1), style=wx.TE_PROCESS_ENTER)
+            self.text_entry[self.dynamixels[name]['motor']['id']] = wx.TextCtrl(
+                self, self.dynamixels[name]['motor']['id'], size=(-1, -1), style=wx.TE_PROCESS_ENTER)
 
-            self.labels[dynamixels[name]['motor']['id']] = ""
+            self.labels[self.dynamixels[name]['motor']['id']] = ""
+
+            # servoSizer.Add(self.labels_objs[dynamixels[name]['motor']['id']], (i,2), wx.GBSpan(1,1),wx.ALIGN_CENTER_VERTICAL)
+            # servoSizer.Add(self.text_entry[dynamixels[name]['motor']['id']],
+            # (i,4), wx.GBSpan(1,1),wx.ALIGN_CENTER_VERTICAL)
 
             # servoSizer.Add(self.labels_objs[dynamixels[name]['motor']['id']], (i,2), wx.GBSpan(1,1),wx.ALIGN_CENTER_VERTICAL)
             # servoSizer.Add(self.text_entry[dynamixels[name]['motor']['id']],
             # (i,4), wx.GBSpan(1,1),wx.ALIGN_CENTER_VERTICAL)
 
-            # servoSizer.Add(self.labels_objs[dynamixels[name]['motor']['id']], (i,2), wx.GBSpan(1,1),wx.ALIGN_CENTER_VERTICAL)
-            # servoSizer.Add(self.text_entry[dynamixels[name]['motor']['id']],
-            # (i,4), wx.GBSpan(1,1),wx.ALIGN_CENTER_VERTICAL)
-            servoSizer.Add(self.labels_objs[dynamixels[name]['motor']['id']], (
+            servoSizer.Add(self.labels_objs[self.dynamixels[name]['motor']['id']], (
                 i, 2), wx.DefaultSpan, wx.ALIGN_CENTER_VERTICAL)
-            servoSizer.Add(self.text_entry[dynamixels[name]['motor']['id']], (
+
+            servoSizer.Add(self.text_entry[self.dynamixels[name]['motor']['id']], (
                 i, 4), wx.DefaultSpan, wx.ALIGN_CENTER_VERTICAL)
 
-            self.servos[dynamixels[name]['motor']['id']] = s
-            self.servos_pos[dynamixels[name]['motor']['id']] = init_angle
+            self.servos[self.dynamixels[name]['motor']['id']] = s
+            self.servos_pos[self.dynamixels[name]['motor']['id']] = init_angle
+
+            # self.publishers[self.dynamixels[name][
+            #     'motor']['id']].publish(Float64(0.0))
+            # time.sleep(0.01)
+            # if not self.default_enabled:
+            #     self.services[
+            #         self.dynamixels[name]['motor']['id']](INIT_TORQUE)
+            # else:
+            #     self.services[
+            #         self.dynamixels[name]['motor']['id']](ON_TORQUE)
+
             i += 1
 
         # add everything
@@ -237,6 +269,7 @@ class controllerGUI(wx.Frame):
         # self.dirty = 1
         # self.onPaint()
 
+        self.ready = True
         self.SetSizerAndFit(sizer)
         self.Show(True)
 
@@ -268,6 +301,25 @@ class controllerGUI(wx.Frame):
             # if self.relaxers[servo]:
             #     self.relaxers[servo]()
 
+    def rad_to_raw(self, motor_id, angle):
+        """ angle is in radians """
+        # print 'flipped = %s, angle_in = %f, init_raw = %d' % (str(flipped),
+        # angle, initial_position_raw)
+        name = self.id_name[motor_id]
+        initial_position_raw = self.dynamixels[name]['motor']['init']
+
+        angle_raw = angle * \
+            self.params[int(self.dynamixels[name]['motor']['id'])][
+                'encoder_ticks_per_radian']
+
+        flipped = self.dynamixels[name]['motor'][
+            'min'] > self.dynamixels[name]['motor']['max']
+
+        # print 'angle = %f, val = %d' % (math.degrees(angle),
+        # int(round(initial_position_raw - angle_raw if flipped else
+        # initial_position_raw + angle_raw)))
+        return int(round(initial_position_raw - angle_raw if flipped else initial_position_raw + angle_raw))
+
     def stateCb(self, msg):
 
         self.servos_pos[msg.motor_ids[0]] = msg.current_pos
@@ -275,7 +327,8 @@ class controllerGUI(wx.Frame):
         # self.servos_pos[msg.motor_ids[0]] = degrees(msg.current_pos)
 
         # self.labels[msg.motor_ids[0]].SetLabel('%.3f'%(msg.current_pos))
-        self.labels[msg.motor_ids[0]] = "%.3f" % (msg.current_pos)
+        self.labels[msg.motor_ids[0]] = "%.3f (%d)" % (
+            msg.current_pos, self.rad_to_raw(msg.motor_ids[0], msg.current_pos))
         # self.labels[msg.motor_ids[0]] = "%.3f" % (degrees(msg.current_pos))
 
             # self.labels[msg.motor_ids[0]].SetLabel('%.3f'%(msg.current_pos))
@@ -320,26 +373,39 @@ class controllerGUI(wx.Frame):
         #         self.servos[s].setPosition(self.servos_pos[s])
 
         # deg
-        for s in self.servos.keys():
-            if self.servos[s].enabled.IsChecked():
-                d = self.servos[s].getPosition()
 
-                if self.labels_objs[s].GetLabel() != str(d):
-                    self.labels_objs[s].SetLabel(str(d))
-                self.publishers[s].publish(d)
-                print s, d
-            else:
-                # d = self.servos[s].getPosition()
+        if self.ready:
 
-                if self.labels_objs[s].GetLabel() != self.labels[s]:
-                    self.labels_objs[s].SetLabel(self.labels[s])
+            for s in self.servos.keys():
+                if self.servos[s].enabled.IsChecked():
+                    d = self.servos[s].getPosition()
 
-                self.servos[s].setPosition(self.servos_pos[s])
+                    if self.labels_objs[s].GetLabel() != str(d):
+                        self.labels_objs[s].SetLabel(str(d))
+                    self.publishers[s].publish(d)
+                    # print s, d
+                else:
+                    # d = self.servos[s].getPosition()
+
+                    if self.labels_objs[s].GetLabel() != self.labels[s]:
+                        self.labels_objs[s].SetLabel(self.labels[s])
+
+                    self.servos[s].setPosition(self.servos_pos[s])
 
 
 if __name__ == '__main__':
     # initialize GUI
+
+    parser = argparse.ArgumentParser(description='Simple robot gui')
+    parser.add_argument('--torque', default="off", type=str,
+                        help='Init motor torque: on or off')
+
+    args = parser.parse_args()
     rospy.init_node('controllerGUI')
+    torque = False
+    if args.torque == "on":
+        torque = True
+
     app = wx.PySimpleApp()
-    frame = controllerGUI(None, True)
+    frame = controllerGUI(None, True, torque)
     app.MainLoop()

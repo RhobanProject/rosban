@@ -38,7 +38,7 @@ from std_msgs.msg import Float64
 
 INIT_TORQUE = 0.0
 OFF_TORQUE = 0.0
-ON_TORQUE = 0.4
+ON_TORQUE = 1.0
 TIMER_DT = 10
 
 width = 325
@@ -129,13 +129,15 @@ class Robot():
         self.servos_pos[msg.motor_ids[0]] = msg.current_pos
 
     def zero(self):
-        rate = rospy.Rate(50)
+        rate = rospy.Rate(10)
+        torque = 0.1
         while not rospy.is_shutdown():
 
             for s in self.servos.keys():
                 # d = self.servos[s].getPosition()
-                self.services[s](ON_TORQUE)
+                self.services[s](torque)
                 self.publishers[s].publish(0.0)
+            torque = min(ON_TORQUE, torque + 0.02)
             rate.sleep()
 
 if __name__ == '__main__':
