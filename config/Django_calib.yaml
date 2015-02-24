@@ -8,8 +8,8 @@ rleg_a_p_controller:
     motor:
         id: 32
         init: 581
-        min: 1023
-        max: 0
+        min: 0
+        max: 1023
 
 rleg_a_r_controller:
     controller:
@@ -34,8 +34,8 @@ lleg_a_p_controller:
     motor:
         id: 37
         init: 500
-        min: 1023
-        max: 0
+        min: 0
+        max: 1023
 
 lleg_a_r_controller:
     controller:
