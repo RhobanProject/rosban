@@ -137,7 +137,11 @@ class Robot():
                 # d = self.servos[s].getPosition()
                 self.services[s](torque)
                 self.publishers[s].publish(0.0)
-            torque = min(ON_TORQUE, torque + 0.02)
+            torque = min(ON_TORQUE, torque + 0.1)
+            if torque == 1.0:
+                print "TORQUE MAX"
+            else:
+                print "TORQUE: ", torque
             rate.sleep()
 
 if __name__ == '__main__':
