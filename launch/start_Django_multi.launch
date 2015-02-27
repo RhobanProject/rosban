@@ -1,0 +1,7 @@
+<launch>
+    <!-- Start Django controller -->
+    <rosparam file="$(find rosban)/config/Django_multi.yaml" command="load"/>
+    <node name="tilt_controller_spawner" pkg="dynamixel_controllers"
+    type="controller_spawner.py" args="--manager=dxl_manager --port django_port django_controller" output="screen"/>
+
+</launch>
