@@ -158,8 +158,8 @@ django_controller:
             max: 1023
 
         joint_name: head_pitch
-    	joint_speed: 6.0
-    	motor:
+        joint_speed: 6.0
+        motor:
             id: 141
             init: 661
             min: 0
