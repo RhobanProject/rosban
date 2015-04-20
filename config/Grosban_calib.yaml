@@ -137,9 +137,9 @@ rleg_h_r_controller:
     joint_speed: 6.0
     motor:
         id: 35
-        init: 1680
-        min: 4095
-        max: 0
+        init: 2414
+        min: 0
+        max: 4095
 
 rleg_h_p_controller:
     controller:
