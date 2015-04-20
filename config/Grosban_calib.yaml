@@ -7,9 +7,9 @@ rleg_a_p_controller:
     joint_speed: 6.0
     motor:
         id: 32
-        init: 581
+        init: 2047
         min: 0
-        max: 1023
+        max: 4095
 
 rleg_a_r_controller:
     controller:
@@ -20,9 +20,9 @@ rleg_a_r_controller:
     joint_speed: 6.0
     motor:
         id: 17
-        init: 519
+        init: 2047
         min: 0
-        max: 1023
+        max: 4095
 
 lleg_a_p_controller:
     controller:
@@ -33,9 +33,9 @@ lleg_a_p_controller:
     joint_speed: 6.0
     motor:
         id: 37
-        init: 500
+        init: 2047
         min: 0
-        max: 1023
+        max: 4095
 
 lleg_a_r_controller:
     controller:
@@ -46,9 +46,9 @@ lleg_a_r_controller:
     joint_speed: 6.0
     motor:
         id: 38
-        init: 499
+        init: 2047
         min: 0
-        max: 1023
+        max: 4095
 
 rarm_s_r_controller:
     controller:
@@ -59,7 +59,7 @@ rarm_s_r_controller:
     joint_speed: 6.0
     motor:
         id: 131
-        init: 552
+        init: 512
         min: 0
         max: 1023
 
@@ -72,7 +72,7 @@ rarm_s_p_controller:
     joint_speed: 6.0
     motor:
         id: 130
-        init: 396
+        init: 512
         min: 0
         max: 1023
 
@@ -85,7 +85,7 @@ rarm_e_p_controller:
     joint_speed: 6.0
     motor:
         id: 132
-        init: 495
+        init: 512
         min: 0
         max: 1023
 
@@ -98,7 +98,7 @@ larm_s_r_controller:
     joint_speed: 6.0
     motor:
         id: 121
-        init: 458
+        init: 512
         min: 0
         max: 1023
 
@@ -111,7 +111,7 @@ larm_s_p_controller:
     joint_speed: 6.0
     motor:
         id: 120
-        init: 593
+        init: 512
         min: 0
         max: 1023
 
@@ -124,7 +124,7 @@ larm_e_p_controller:
     joint_speed: 6.0
     motor:
         id: 122
-        init: 489
+        init: 512
         min: 0
         max: 1023
 
@@ -137,9 +137,9 @@ rleg_h_r_controller:
     joint_speed: 6.0
     motor:
         id: 35
-        init: 436
+        init: 2047
         min: 0
-        max: 1023
+        max: 4095
 
 rleg_h_p_controller:
     controller:
@@ -150,9 +150,9 @@ rleg_h_p_controller:
     joint_speed: 6.0
     motor:
         id: 36
-        init: 431
+        init: 2047
         min: 0
-        max: 1023
+        max: 4095
 
 rleg_h_y_controller:
     controller:
@@ -163,9 +163,9 @@ rleg_h_y_controller:
     joint_speed: 6.0
     motor:
         id: 103
-        init: 588
+        init: 2047
         min: 0
-        max: 1023
+        max: 4095
 
 lleg_h_r_controller:
     controller:
@@ -176,9 +176,9 @@ lleg_h_r_controller:
     joint_speed: 6.0
     motor:
         id: 10
-        init: 600
+        init: 2047
         min: 0
-        max: 1023
+        max: 4095
 
 lleg_h_p_controller:
     controller:
@@ -189,9 +189,9 @@ lleg_h_p_controller:
     joint_speed: 6.0
     motor:
         id: 12
-        init: 589
+        init: 2047
         min: 0
-        max: 1023
+        max: 4095
 
 lleg_h_y_controller:
     controller:
@@ -202,9 +202,9 @@ lleg_h_y_controller:
     joint_speed: 6.0
     motor:
         id: 102
-        init: 581
+        init: 2047
         min: 0
-        max: 1023
+        max: 4095
 
 rleg_k_p_controller:
     controller:
@@ -215,8 +215,8 @@ rleg_k_p_controller:
     joint_speed: 6.0
     motor:
         id: 6
-        init: 580
-        min: 1023
+        init: 2047
+        min: 4095
         max: 0
 
 lleg_k_p_controller:
@@ -228,8 +228,8 @@ lleg_k_p_controller:
     joint_speed: 6.0
     motor:
         id: 15
-        init: 421
-        min: 1023
+        init: 2047
+        min: 4095
         max: 0
 
 head_y_controller:
@@ -241,7 +241,7 @@ head_y_controller:
     joint_speed: 6.0
     motor:
         id: 140
-        init: 580
+        init: 512
         min: 0
         max: 1023
 
@@ -254,7 +254,7 @@ head_p_controller:
     joint_speed: 6.0
     motor:
         id: 141
-        init: 661
+        init: 512
         min: 0
         max: 1023
 
