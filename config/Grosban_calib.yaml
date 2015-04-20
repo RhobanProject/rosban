@@ -163,7 +163,7 @@ rleg_h_y_controller:
     joint_speed: 6.0
     motor:
         id: 103
-        init: 2047
+        init: 1680
         min: 4095
         max: 0
 
