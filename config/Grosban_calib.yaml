@@ -59,7 +59,7 @@ rarm_s_r_controller:
     joint_speed: 6.0
     motor:
         id: 131
-        init: 512
+        init: 589
         min: 0
         max: 1023
 
@@ -72,7 +72,7 @@ rarm_s_p_controller:
     joint_speed: 6.0
     motor:
         id: 130
-        init: 512
+        init: 435
         min: 0
         max: 1023
 
@@ -85,7 +85,7 @@ rarm_e_p_controller:
     joint_speed: 6.0
     motor:
         id: 132
-        init: 512
+        init: 435
         min: 0
         max: 1023
 
@@ -98,7 +98,7 @@ larm_s_r_controller:
     joint_speed: 6.0
     motor:
         id: 121
-        init: 512
+        init: 435
         min: 0
         max: 1023
 
@@ -111,7 +111,7 @@ larm_s_p_controller:
     joint_speed: 6.0
     motor:
         id: 120
-        init: 512
+        init: 589
         min: 0
         max: 1023
 
@@ -124,7 +124,7 @@ larm_e_p_controller:
     joint_speed: 6.0
     motor:
         id: 122
-        init: 512
+        init: 589
         min: 0
         max: 1023
 
