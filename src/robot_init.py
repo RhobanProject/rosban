@@ -131,7 +131,8 @@ class Robot():
     def zero(self):
         rate = rospy.Rate(10)
         torque = 0.1
-        while not rospy.is_shutdown():
+        stop = False
+        while not rospy.is_shutdown() and not stop:
 
             for s in self.servos.keys():
                 # d = self.servos[s].getPosition()
@@ -140,6 +141,8 @@ class Robot():
             torque = min(ON_TORQUE, torque + 0.1)
             if torque == 1.0:
                 print "TORQUE MAX"
+                stop = True
+
             else:
                 print "TORQUE: ", torque
             rate.sleep()

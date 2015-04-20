@@ -1,0 +1,7 @@
+<launch>
+    <!-- Start Grosban controller -->
+    <rosparam file="$(find rosban)/config/Grosban_calib.yaml" command="load"/>
+    <node name="tilt_controller_spawner" pkg="dynamixel_controllers"
+    type="controller_spawner.py" args="--manager=dxl_manager --port grosban_port lleg_a_r_controller lleg_a_p_controller rarm_e_p_controller rarm_s_r_controller rarm_s_p_controller larm_e_p_controller larm_s_r_controller larm_s_p_controller head_y_controller head_p_controller rleg_h_y_controller rleg_h_r_controller rleg_h_p_controller rleg_k_p_controller rleg_a_p_controller rleg_a_r_controller lleg_h_y_controller lleg_h_r_controller lleg_h_p_controller lleg_k_p_controller" output="screen"/>
+
+</launch>
