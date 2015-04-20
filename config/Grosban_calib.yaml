@@ -20,7 +20,7 @@ rleg_a_r_controller:
     joint_speed: 6.0
     motor:
         id: 17
-        init: 1680
+        init: 2414
         min: 4095
         max: 0
 
@@ -46,7 +46,7 @@ lleg_a_r_controller:
     joint_speed: 6.0
     motor:
         id: 38
-        init: 2414
+        init: 1680
         min: 0
         max: 4095
 
