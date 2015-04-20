@@ -241,7 +241,7 @@ head_y_controller:
     joint_speed: 6.0
     motor:
         id: 140
-        init: 512
+        init: 435
         min: 0
         max: 1023
 
