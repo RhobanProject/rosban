@@ -177,8 +177,8 @@ lleg_h_r_controller:
     motor:
         id: 10
         init: 2047
-        min: 0
-        max: 4095
+        min: 4095
+        max: 0
 
 lleg_h_p_controller:
     controller:
@@ -203,8 +203,8 @@ lleg_h_y_controller:
     motor:
         id: 102
         init: 2047
-        min: 0
-        max: 4095
+        min: 4095
+        max: 0
 
 rleg_k_p_controller:
     controller:
@@ -229,8 +229,8 @@ lleg_k_p_controller:
     motor:
         id: 15
         init: 2047
-        min: 4095
-        max: 0
+        min: 0
+        max: 4095
 
 head_y_controller:
     controller:
