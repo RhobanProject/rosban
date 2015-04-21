@@ -59,7 +59,7 @@ rarm_s_r_controller:
     joint_speed: 6.0
     motor:
         id: 131
-        init: 359
+        init: 282
         min: 0
         max: 1023
 
@@ -98,7 +98,7 @@ larm_s_r_controller:
     joint_speed: 6.0
     motor:
         id: 121
-        init: 665
+        init: 742
         min: 0
         max: 1023
 
@@ -215,7 +215,7 @@ rleg_k_p_controller:
     joint_speed: 6.0
     motor:
         id: 6
-        init: 1313
+        init: 2781
         min: 0
         max: 4095
 
