@@ -185,8 +185,16 @@ class controllerGUI(wx.Frame):
 
             # create slider
             # s = servoSlider(self, min_angle, max_angle, name, i)
-            s = servoSlider(self, min_angle, max_angle, self.dynamixels[
-                            name]['joint_name'], self.dynamixels[name]['motor']['id'], default_enabled)
+
+            if min_angle < max_angle:
+
+                s = servoSlider(self, min_angle, max_angle, self.dynamixels[
+                    name]['joint_name'], self.dynamixels[name]['motor']['id'], default_enabled)
+            else:
+
+                s = servoSlider(self, max_angle, min_angle, self.dynamixels[
+                    name]['joint_name'], self.dynamixels[name]['motor']['id'], default_enabled)
+
             s.setPosition(init_angle)
             # servoSizer.Add(s.enabled,(i,0), wx.GBSpan(1,1),wx.ALIGN_CENTER_VERTICAL)
             # servoSizer.Add(s.position,(i,1),

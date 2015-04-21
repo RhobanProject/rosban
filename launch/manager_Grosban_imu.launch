@@ -6,11 +6,12 @@
             namespace: dxl_manager
             serial_ports:
                 grosban_port:
-                    port_name: "/dev/ttyUSB0"
+                    port_name: "/dev/ttyACM0"
                     baud_rate: 1000000
                     min_motor_id: 5
                     max_motor_id: 241
                     motor_list_id: [32,17,37,38,35,36,103,10,12,102,6,15,130,131,132,120,121,122,140,141,241]
+                    sync_read_list: [32,17,37,38,35,36,103,10,12,102,6,15,130,131,132,120,121,122,140,141]
                     update_rate: 50
         </rosparam>
     </node>
