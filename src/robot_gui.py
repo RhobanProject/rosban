@@ -40,8 +40,8 @@ from std_msgs.msg import Float64
 
 INIT_TORQUE = 0.0
 OFF_TORQUE = 0.0
-ON_TORQUE = 0.5
-TIMER_DT = 10
+ON_TORQUE = 1.0
+TIMER_DT = 100
 
 width = 325
 
@@ -78,7 +78,7 @@ class controllerGUI(wx.Frame):
         # sizer = wx.GridBagSizer(0,0)
         sizer = wx.BoxSizer(wx.VERTICAL)
         self.default_enabled = default_enabled
-        self.ready = False
+        self.ready = 20
         # Move Servos
         # servo = wx.StaticBox(self, -1, 'Move Servos')
         # servo.SetFont(wx.Font(10, wx.DEFAULT, wx.NORMAL, wx.BOLD))
@@ -112,6 +112,7 @@ class controllerGUI(wx.Frame):
         self.publishers = dict()
         self.subscribers = dict()
         self.services = dict()
+        self.enabled = dict()
         # self.relaxers = list()
 
         # joints = rospy.get_param('/arbotix/joints', dict())
@@ -145,7 +146,8 @@ class controllerGUI(wx.Frame):
                 self.dynamixels[name]['motor']['id']]['encoder_ticks_per_radian']
             self.id_name[self.dynamixels[name]['motor']['id']] = name
             # init_angle = degrees(init_angle)
-
+            self.enabled[
+                self.dynamixels[name]['motor']['id']] = False
             # init_angle=0.0
 
             # print
@@ -195,11 +197,12 @@ class controllerGUI(wx.Frame):
                 s = servoSlider(self, max_angle, min_angle, self.dynamixels[
                     name]['joint_name'], self.dynamixels[name]['motor']['id'], default_enabled)
 
-            s.setPosition(init_angle)
+                # problem?
+            # s.setPosition(init_angle)
+
             # servoSizer.Add(s.enabled,(i,0), wx.GBSpan(1,1),wx.ALIGN_CENTER_VERTICAL)
             # servoSizer.Add(s.position,(i,1),
             # wx.GBSpan(1,1),wx.ALIGN_CENTER_VERTICAL)
-
             servoSizer.Add(
                 s.enabled, (i, 0), wx.DefaultSpan, wx.ALIGN_CENTER_VERTICAL)
             servoSizer.Add(
@@ -277,7 +280,7 @@ class controllerGUI(wx.Frame):
         # self.dirty = 1
         # self.onPaint()
 
-        self.ready = True
+        # self.ready = True
         self.SetSizerAndFit(sizer)
         self.Show(True)
 
@@ -352,8 +355,8 @@ class controllerGUI(wx.Frame):
         s = event.GetId()
 
         if self.servos[s].enabled.IsChecked():
-            self.servos[s].setPosition(
-                radians(float(self.text_entry[s].GetValue())))
+            self.servos[s].setPosition(float(self.text_entry[s].GetValue()))
+                # radians(float(self.text_entry[s].GetValue())))
 
     def onTimer(self, event=None):
         d = Float64()
@@ -382,23 +385,30 @@ class controllerGUI(wx.Frame):
 
         # deg
 
-        if self.ready:
+        for s in self.servos.keys():
+            d = self.servos[s].getPosition()
+            if self.labels_objs[s].GetLabel() != str(d):
+                self.labels_objs[s].SetLabel(str(d))
 
-            for s in self.servos.keys():
-                if self.servos[s].enabled.IsChecked():
-                    d = self.servos[s].getPosition()
+            if self.servos[s].enabled.IsChecked():
+                self.publishers[s].publish(d)
+                # print s, d
+            else:
+                # d = self.servos[s].getPosition()
 
-                    if self.labels_objs[s].GetLabel() != str(d):
-                        self.labels_objs[s].SetLabel(str(d))
-                    self.publishers[s].publish(d)
-                    # print s, d
-                else:
-                    # d = self.servos[s].getPosition()
+                if self.labels_objs[s].GetLabel() != self.labels[s]:
+                    self.labels_objs[s].SetLabel(self.labels[s])
 
-                    if self.labels_objs[s].GetLabel() != self.labels[s]:
-                        self.labels_objs[s].SetLabel(self.labels[s])
+                self.servos[s].setPosition(self.servos_pos[s])
 
-                    self.servos[s].setPosition(self.servos_pos[s])
+            if self.ready == 0:
+                if not self.enabled[s]:
+                    self.servos[s].position.Enable()
+                    self.enabled[s] = True
+                    self.services[s](ON_TORQUE)
+                    print 'ID %d torque %f' % (s, ON_TORQUE)
+            else:
+                self.ready -= 1
 
 
 if __name__ == '__main__':
@@ -413,7 +423,7 @@ if __name__ == '__main__':
     torque = False
     if args.torque == "on":
         torque = True
-
+        print('INIT ON')
     app = wx.PySimpleApp()
     frame = controllerGUI(None, True, torque)
     app.MainLoop()
