@@ -236,7 +236,7 @@ class Robot():
         # amp = 0.3
         amp = 0.0
         while not rospy.is_shutdown():
-            if amp < 0.3:
+            if amp < 0.174:
                 amp += 0.0001
             angle = amp * np.sin(2.0 * np.pi * freq * rospy.get_time())
             self.publishers[
