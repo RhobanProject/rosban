@@ -210,8 +210,11 @@ class Robot():
             self.dynamixels['rarm_s_r_controller']['motor']['id']].publish(1.55)
         self.publishers[
             self.dynamixels['rleg_a_r_controller']['motor']['id']].publish(- 0.04)
+        # self.publishers[
+        # self.dynamixels['rleg_h_r_controller']['motor']['id']].publish(0.226)
         self.publishers[
             self.dynamixels['rleg_h_r_controller']['motor']['id']].publish(0.226)
+
         rospy.sleep(3.0)
         torque = 1.0
 
@@ -236,7 +239,7 @@ class Robot():
         # amp = 0.3
         amp = 0.0
         while not rospy.is_shutdown():
-            if amp < 0.174:
+            if amp < 0.122:
                 amp += 0.0001
             angle = amp * np.sin(2.0 * np.pi * freq * rospy.get_time())
             self.publishers[
